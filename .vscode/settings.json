@@ -1,0 +1,4 @@
+{
+    "python.pythonPath": "C:\\Users\\giddy\\envs\\pygame\\Scripts\\python.exe",
+    "python.linting.pylintArgs": ["--extension-pkg-whitelist=pygame", "--errors-only"]
+}
