@@ -58,29 +58,34 @@ class Ball(pygame.sprite.Sprite):
         Ball.rect.y = 250
         self.velocity = [5,random.randint(-5,5)]
 
-        
+class Player(pygame.sprite.Sprite):
+    def __init__(self, side):
+        super().__init__()
 
-#init paddles
-paddle1 = Paddle(Colours.WHITE, 10, 100)
-paddle1.rect.x = 30
-paddle1.rect.y = 200
+        self.score = 0
 
-paddle2 = Paddle(Colours.WHITE, 10, 100)
-paddle2.rect.x = 970
-paddle2.rect.y = 200
+        self.paddle = Paddle(Colours.WHITE, 10, 100)
+        if side == "left":
+            self.paddle.rect.x = 30
+            self.paddle.rect.y = 200
+            sprites_list.add(self.paddle)
+        else:
+            self.paddle.rect.x = 970
+            self.paddle.rect.y = 200
+            sprites_list.add(self.paddle)
+
 #init ball
 Ball = Ball(Colours.WHITE, 10, 10)
 Ball.reset()
 #add sprites to list
 sprites_list = pygame.sprite.Group()
-sprites_list.add(paddle1)
-sprites_list.add(paddle2)
+
 sprites_list.add(Ball)
 #enable clock
 clock = pygame.time.Clock()
 #init scores
-Score1 = 0
-Score2 = 0
+Player1 = Player("left")
+Player2 = Player("right")
 
 
 while True:
@@ -93,13 +98,13 @@ while True:
     #play keys
     key = pygame.key.get_pressed()
     if key[pygame.K_UP]:
-        paddle2.move_up(5)
+        Player2.paddle.move_up(5)
     if key[pygame.K_DOWN]:
-        paddle2.move_down(5)
+        Player2.paddle.move_down(5)
     if key[pygame.K_w]:
-        paddle1.move_up(5)
+        Player1.paddle.move_up(5)
     if key[pygame.K_s]:
-        paddle1.move_down(5)
+        Player1.paddle.move_down(5)
     
     #Hit floor or ceiling
     if Ball.rect.y>500:
@@ -107,23 +112,23 @@ while True:
     if Ball.rect.y<0:
         Ball.velocity[1] = -Ball.velocity[1]
     #hit paddle
-    if pygame.sprite.collide_mask(Ball, paddle1) or pygame.sprite.collide_mask(Ball, paddle2):
+    if pygame.sprite.collide_mask(Ball, Player1.paddle) or pygame.sprite.collide_mask(Ball, Player2.paddle):
         Ball.bounce()
 
     #Git goal
     if Ball.rect.x>=990:
-        Score1+=1
+        Player1.score += 1
         Ball.reset()
     if Ball.rect.x<=0:
-        Score2+=1
+        Player2.score += 1
         Ball.reset()
 
     screen.fill(Colours.BLACK)
     #Display Score
     font = pygame.font.Font(None, 74)
-    text = font.render(str(Score1), 1, Colours.WHITE)
+    text = font.render(str(Player1.score), 1, Colours.WHITE)
     screen.blit(text, (450,50))
-    text = font.render(str(Score2), 1, Colours.WHITE)
+    text = font.render(str(Player2.score), 1, Colours.WHITE)
     screen.blit(text, (550,50))
 
     #Update screen
