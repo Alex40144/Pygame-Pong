@@ -56,7 +56,7 @@ class Ball(pygame.sprite.Sprite):
     def reset(self):
         Ball.rect.x = 500
         Ball.rect.y = 250
-        self.velocity = [5,random.randint(-5,5)]
+        self.velocity = [random.choice((-5,5)),random.randint(-5,5)]
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, side):
